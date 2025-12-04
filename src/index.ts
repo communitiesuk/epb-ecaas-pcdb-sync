@@ -1,3 +1,7 @@
+import { clearProducts } from "./clear_products";
+import { importProducts } from "./import_products";
+
 export const handler = async () => {
-	console.log("AWS Lambda");
+	await clearProducts();
+  	await importProducts("export.json");
 };
