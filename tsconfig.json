@@ -15,10 +15,8 @@
 	"noImplicitOverride": true,
 
 	/* Transpiling */
-	"module": "esnext",
-	"moduleResolution": "bundler",
-    "outDir": "./dist"
+	"module": "nodenext",
+  "outDir": "./dist"
   },
-  "include": ["./package.json"],
-  "exclude": ["**/*.types.ts"]
+  "include": ["./package.json", "src/**/*"],
 }
