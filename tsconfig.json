@@ -19,4 +19,5 @@
   "outDir": "./dist"
   },
   "include": ["./package.json", "src/**/*"],
+  "exclude": ["src/import_local.ts", "src/import_products_file.ts"]
 }

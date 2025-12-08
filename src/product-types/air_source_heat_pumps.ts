@@ -1,9 +1,19 @@
 import { batchItems } from "../utils/batch_items.js";
 import { BatchWriteItemCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import type { BreAirSourceHeatPumpData, BreAirSourceHeatPumpTestData, BreResponse } from "../pcdb.types.ts";
+import { type BreAirSourceHeatPumpData, type BreAirSourceHeatPumpTestData, type BreResponse } from "../pcdb.types.js";
 
-const client = new DynamoDBClient({});
+const localDynamoDBConfig = {
+	region: "fakeRegion", 
+	endpoint: "http://localhost:8000",
+	credentials: {
+		accessKeyId: "fakeMyKeyId",
+		secretAccessKey: "fakeSecretAccessKey",
+	},
+	convertEmptyValues: true,
+};
+
+const client = new DynamoDBClient(process.env.NODE_ENV === "development" ? localDynamoDBConfig : {});
 const docClient = DynamoDBDocumentClient.from(client);
 
 export const importAirSourceHeatPumps = async (data: BreResponse[]) => {

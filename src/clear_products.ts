@@ -2,7 +2,16 @@ import { BatchWriteItemCommand, DynamoDBClient, ScanCommand, type AttributeValue
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { batchItems } from "./utils/batch_items.js";
 
-const client = new DynamoDBClient({});
+const localDynamoDBConfig = {
+	region: "fakeRegion", 
+	endpoint: "http://localhost:8000",
+	credentials: {
+		accessKeyId: "fakeMyKeyId",
+		secretAccessKey: "fakeSecretAccessKey",
+	}
+};
+
+const client = new DynamoDBClient(process.env.NODE_ENV === "development" ? localDynamoDBConfig : {});
 const docClient = DynamoDBDocumentClient.from(client);
 
 const getProducts = async (lastEvaluationKey?: Record<string, AttributeValue>, products: Record<string, AttributeValue>[] = []): Promise<Record<string, AttributeValue>[]> => {
