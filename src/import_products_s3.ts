@@ -1,5 +1,5 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { importAirSourceHeatPumps } from "./product-types/air_source_heat_pumps.js";
+import { saveProducts } from "./save_products.js";
 
 const readFile = async (fileName: string) => {
 	console.log(`Reading data from ${fileName}`);
@@ -27,5 +27,5 @@ export const importProducts = async (fileName: string) => {
     const data = await readFile(fileName);
     const products = data ? JSON.parse(data) : [];
 
-    await importAirSourceHeatPumps(products);
+    await saveProducts(products);
 };
