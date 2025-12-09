@@ -62,7 +62,7 @@ const saveProductType = async (productsResponse: BreResponse) => {
 							id: (data.id ?? data.productID) as string,
 							brandName: (data.brand ?? data.brandName ?? "") as string,
 							modelName: (data.modelName ?? "") as string,
-							technologyType: productsResponse.productType,
+							technologyType: productsResponse.productType.trim().toLowerCase(),
 						};
 
 						return {
