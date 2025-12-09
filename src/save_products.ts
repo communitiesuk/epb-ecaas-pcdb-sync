@@ -53,9 +53,6 @@ const saveProductType = async (productsResponse: BreResponse) => {
 				RequestItems: {
 					"products": batch.map(x => {
 						const data = keysToCamelCase(x);
-						const productTestData = testData.filter(td => td.productID === data.id);
-
-						data["testData"] = productTestData.map(td => keysToCamelCase(td));
 
 						const item: ProductData = {
 							...data,
@@ -65,10 +62,13 @@ const saveProductType = async (productsResponse: BreResponse) => {
 							technologyType: productsResponse.productType.trim().toLowerCase(),
 						};
 
+						const productTestData = testData.filter(td => td.productID === data.id);
+
 						return {
 							PutRequest: {
 								Item: {
 									...item,
+									testData: productTestData.map(td => keysToCamelCase(td)),
 									"sk-by-brand": `${item.brandName.toLowerCase()}#${item.modelName.toLowerCase()}#${item.modelQualifier?.toLowerCase() ?? ""}`,
 									"sk-by-model": `${item.modelName.toLowerCase()}#${item.modelQualifier?.toLowerCase() ?? ""}`,
 								}
