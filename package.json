@@ -11,9 +11,9 @@
     "node": "^22.17.1"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.943.0",
-    "@aws-sdk/client-s3": "^3.943.0",
-    "@aws-sdk/lib-dynamodb": "^3.943.0",
+    "@aws-sdk/client-dynamodb": "^3.987.0",
+    "@aws-sdk/client-s3": "^3.987.0",
+    "@aws-sdk/lib-dynamodb": "^3.987.0",
     "@types/node": "^24.10.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
