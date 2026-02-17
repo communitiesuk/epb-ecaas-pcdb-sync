@@ -47,7 +47,8 @@
 					"id",
 					"brandName",
 					"modelName",
-					"modelQualifier"
+					"modelQualifier",
+					"boilerLocation"
 				]
 			}
 		},
