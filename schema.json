@@ -48,7 +48,8 @@
 					"brandName",
 					"modelName",
 					"modelQualifier",
-					"boilerLocation"
+					"boilerLocation",
+					"communityHeatNetworkName"
 				]
 			}
 		},
