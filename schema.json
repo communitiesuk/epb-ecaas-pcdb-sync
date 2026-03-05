@@ -10,15 +10,7 @@
 			"AttributeType": "S"
 		},
 		{
-			"AttributeName": "modelQualifier",
-			"AttributeType": "S"
-		},
-		{
-			"AttributeName": "sk-by-brand",
-			"AttributeType": "S"
-		},
-		{
-			"AttributeName": "sk_by_model",
+			"AttributeName": "brandName",
 			"AttributeType": "S"
 		}
 	],
@@ -30,14 +22,14 @@
 	],
 	"GlobalSecondaryIndexes": [
 		{
-			"IndexName": "by-brand",
+			"IndexName": "by-technology-type",
 			"KeySchema": [
 				{
 					"AttributeName": "technologyType",
 					"KeyType": "HASH"
 				},
 				{
-					"AttributeName": "sk-by-brand",
+					"AttributeName": "brandName",
 					"KeyType": "RANGE"
 				}
 			],
@@ -49,51 +41,9 @@
 					"modelName",
 					"modelQualifier",
 					"boilerLocation",
-					"communityHeatNetworkName"
-				]
-			}
-		},
-		{
-			"IndexName": "by-model",
-			"KeySchema": [
-				{
-					"AttributeName": "technologyType",
-					"KeyType": "HASH"
-				},
-				{
-					"AttributeName": "sk_by_model",
-					"KeyType": "RANGE"
-				}
-			],
-			"Projection": {
-				"ProjectionType": "INCLUDE",
-				"NonKeyAttributes": [
-					"id",
-					"brandName",
-					"modelName",
-					"modelQualifier"
-				]
-			}
-		},
-		{
-			"IndexName": "by-model-qualifier",
-			"KeySchema": [
-				{
-					"AttributeName": "technologyType",
-					"KeyType": "HASH"
-				},
-				{
-					"AttributeName": "modelQualifier",
-					"KeyType": "RANGE"
-				}
-			],
-			"Projection": {
-				"ProjectionType": "INCLUDE",
-				"NonKeyAttributes": [
-					"id",
-					"brandName",
-					"modelName",
-					"modelQualifier"
+					"communityHeatNetworkName",
+					"backupCtrlType",
+					"powerMaxBackup"
 				]
 			}
 		}

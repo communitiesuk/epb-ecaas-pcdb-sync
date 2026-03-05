@@ -61,7 +61,7 @@ const saveProductType = async (productsResponse: BreProduct) => {
 						const item: ProductData = {
 							...data,
 							id: (data.id ?? data.productID) as string,
-							brandName: (data.brandName ?? "") as string,
+							brandName: (data.brandName ?? "-") as string,
 							modelName: (data.modelName ?? "") as string,
 							technologyType: productsResponse.productType.trim(),
 						};
@@ -71,8 +71,6 @@ const saveProductType = async (productsResponse: BreProduct) => {
 								Item: {
 									...item,
 									testData: Array.isArray(data.testData) ? data.testData.map(td => keysToCamelCase(td)) : [],
-									"sk-by-brand": `${item.brandName.toLowerCase()}#${item.modelName.toLowerCase()}#${item.modelQualifier?.toLowerCase() ?? ""}`,
-									"sk-by-model": `${item.modelName.toLowerCase()}#${item.modelQualifier?.toLowerCase() ?? ""}`,
 								}
 							}
 						};
