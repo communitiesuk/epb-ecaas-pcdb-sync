@@ -36,7 +36,7 @@ bun install
 
 Run `docker compose up -d` to install the dynamodb-local docker image and start the container.
 
-Run `npm init` to create the products table from the schema defined in schema.json.
+Run `npm run init` to create the products table from the schema defined in schema.json.
 
 Create a new folder in the project root called "data".
 
