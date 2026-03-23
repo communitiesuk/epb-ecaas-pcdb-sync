@@ -16,4 +16,5 @@ export interface ProductData {
 	modelName: string;
 	modelQualifier?: string;
 	technologyType: string;
+	technologyGroup?: string;
 }

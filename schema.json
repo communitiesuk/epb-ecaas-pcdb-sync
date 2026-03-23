@@ -10,6 +10,10 @@
 			"AttributeType": "S"
 		},
 		{
+			"AttributeName": "technologyGroup",
+			"AttributeType": "S"
+		},
+		{
 			"AttributeName": "brandName",
 			"AttributeType": "S"
 		}
@@ -41,9 +45,29 @@
 					"modelName",
 					"modelQualifier",
 					"boilerLocation",
-					"communityHeatNetworkName",
-					"backupCtrlType",
-					"powerMaxBackup"
+					"communityHeatNetworkName"
+				]
+			}
+		},
+		{
+			"IndexName": "by-technology-group",
+			"KeySchema": [
+				{
+					"AttributeName": "technologyGroup",
+					"KeyType": "HASH"
+				},
+				{
+					"AttributeName": "brandName",
+					"KeyType": "RANGE"
+				}
+			],
+			"Projection": {
+				"ProjectionType": "INCLUDE",
+				"NonKeyAttributes": [
+					"id",
+					"brandName",
+					"modelName",
+					"modelQualifier"
 				]
 			}
 		}

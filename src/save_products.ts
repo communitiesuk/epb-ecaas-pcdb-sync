@@ -3,6 +3,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { BatchWriteCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { type BreResponse, type BreProduct, type ProductData } from "./pcdb.types.js";
 import { keysToCamelCase } from "./utils/objects.js";
+import technologyGroupMapping from "./product_group_mapping.js";
 
 const localDynamoDBConfig = {
 	region: "fakeRegion", 
@@ -37,6 +38,7 @@ export const saveProducts = async (response: BreResponse | undefined) => {
 
 const saveProductType = async (productsResponse: BreProduct) => {
 	const products = (productsResponse?.data ?? []) as Record<string, unknown>[];
+	const productType = productsResponse.productType.trim();
 
 	const batchedProducts = batchItems(products);
 	let completedBatches = 0;
@@ -63,7 +65,8 @@ const saveProductType = async (productsResponse: BreProduct) => {
 							id: (data.id ?? data.productID) as string,
 							brandName: (data.brandName ?? "-") as string,
 							modelName: (data.modelName ?? "") as string,
-							technologyType: productsResponse.productType.trim(),
+							technologyType: productType,
+							...(technologyGroupMapping[productType] ? { technologyGroup: technologyGroupMapping[productType] } : {})
 						};
 
 						return {
