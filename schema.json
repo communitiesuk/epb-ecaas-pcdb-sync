@@ -44,6 +44,7 @@
 					"brandName",
 					"modelName",
 					"modelQualifier",
+					"technologyType",
 					"boilerLocation",
 					"communityHeatNetworkName"
 				]
@@ -67,7 +68,9 @@
 					"id",
 					"brandName",
 					"modelName",
-					"modelQualifier"
+					"modelQualifier",
+					"technologyType",
+					"boilerProductID"
 				]
 			}
 		}
