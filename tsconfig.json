@@ -16,7 +16,9 @@
 
 	/* Transpiling */
 	"module": "nodenext",
-  "outDir": "./dist"
+  	"outDir": "./dist",
+
+	"types": ["node"]
   },
   "include": ["./package.json", "src/**/*"],
   "exclude": ["src/import_local.ts", "src/import_products_file.ts"]

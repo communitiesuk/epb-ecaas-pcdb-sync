@@ -62,7 +62,7 @@ const saveProductType = async (productsResponse: BreProduct) => {
 
 						const item: ProductData = {
 							...data,
-							id: (data.id ?? data.productID) as string,
+							id: `${(data.id ?? data.productID)}`,
 							brandName: (data.brandName ?? "-") as string,
 							modelName: (data.modelName ?? "") as string,
 							technologyType: productType,
