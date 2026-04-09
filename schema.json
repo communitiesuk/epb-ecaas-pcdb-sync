@@ -70,7 +70,8 @@
 					"modelName",
 					"modelQualifier",
 					"technologyType",
-					"boilerProductID"
+					"boilerProductID",
+					"vesselType"
 				]
 			}
 		}
