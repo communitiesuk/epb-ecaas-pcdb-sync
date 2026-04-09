@@ -6,7 +6,7 @@ const readFile = async (fileName: string) => {
 	console.log(`Reading data from ${fileName}`);
 
     const params = {
-		Bucket: "epb-ecaas-pcdb",
+		Bucket: process.env.bucket_name,
 		Key: fileName,
 	};
 
