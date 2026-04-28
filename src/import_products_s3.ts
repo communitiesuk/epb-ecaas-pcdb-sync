@@ -6,7 +6,7 @@ const readFile = async (fileName: string) => {
 	console.log(`Reading data from ${fileName}`);
 
     const params = {
-		Bucket: process.env.bucket_name,
+		Bucket: process.env.BUCKET_NAME,
 		Key: fileName,
 	};
 
