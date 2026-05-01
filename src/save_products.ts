@@ -1,6 +1,6 @@
 import { batchItems } from "./utils/batch_items.js";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { BatchWriteCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { BatchWriteCommand, DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { type BreResponse, type BreProduct, type ProductData } from "./pcdb.types.js";
 import { keysToCamelCase } from "./utils/objects.js";
 import technologyGroupMapping from "./product_group_mapping.js";
@@ -17,6 +17,12 @@ const localDynamoDBConfig = {
 const client = new DynamoDBClient(process.env.NODE_ENV === "development" ? localDynamoDBConfig : {});
 const docClient = DynamoDBDocumentClient.from(client);
 
+const inUseFactorsTableSuffix = "InUseFactors";
+
+function productTypeIsInUseFactors(productData: BreProduct): boolean {
+	return productData.productType.endsWith(inUseFactorsTableSuffix);
+}
+
 export const saveProducts = async (response: BreResponse | undefined) => {
 	console.log("Save products");
 
@@ -27,7 +33,14 @@ export const saveProducts = async (response: BreResponse | undefined) => {
 
 	for (const productType of response.productTypes) {
 		try {
-			await saveProductType(productType);
+			if (!productTypeIsInUseFactors(productType)) {
+				// it's a standard product category
+				await saveProductType(productType);
+			} else {
+				// it's side-loaded in use factors metadata
+				await saveInUseFactorsType(productType);
+			}
+			
 		}
 		catch (err: unknown) {
 			console.error(`Error writing ${productType.productTypeName} data to DynamoDB`, err);
@@ -36,9 +49,9 @@ export const saveProducts = async (response: BreResponse | undefined) => {
 	}
 }
 
-const saveProductType = async (productsResponse: BreProduct) => {
-	const products = (productsResponse?.data ?? []) as Record<string, unknown>[];
-	const productType = productsResponse.productType.trim();
+async function saveProductType(productTypeData: BreProduct) {
+	const products = (productTypeData?.data ?? []) as Record<string, unknown>[];
+	const productType = productTypeData.productType.trim();
 
 	const batchedProducts = batchItems(products);
 	let completedBatches = 0;
@@ -87,3 +100,19 @@ const saveProductType = async (productsResponse: BreProduct) => {
 
 	console.log(`Completed ${completedBatches} of ${batchedProducts.length} batches`);
 };
+
+async function saveInUseFactorsType(inUseFactorsData: BreProduct) {
+	console.log(`Saving ${ inUseFactorsData.productType.slice(0, -inUseFactorsTableSuffix.length) } in use factors data`);
+
+	await docClient.send(
+		new PutCommand({
+			TableName: "products",
+			Item: {
+				id: inUseFactorsData.productType, // use product type as ID directly
+				data: inUseFactorsData.data,
+			}
+		})
+	);
+
+	console.log(`Saved set of in use factors data`);
+}

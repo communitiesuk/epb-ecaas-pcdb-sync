@@ -5,7 +5,7 @@ export interface BreResponse {
 }
 
 export interface BreProduct {
-	data: unknown[];
+	data: object[];
 	productType: string;
 	productTypeName: string;
 }
