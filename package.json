@@ -6,7 +6,9 @@
     "init": "aws dynamodb create-table --cli-input-json file://schema.json --endpoint-url http://localhost:8000",
     "delete": "aws dynamodb delete-table --table-name products --endpoint-url http://localhost:8000",
     "dev": "NODE_ENV=development tsx ./src/import_local.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
   "engines": {
     "node": "^22.17.1"
@@ -19,6 +21,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@types/node": "^25.5.2"
+    "@types/node": "^25.5.2",
+    "oxlint": "^1.62.0"
   }
 }
