@@ -86,7 +86,7 @@ async function saveProductType(productTypeData: BreProduct) {
 							PutRequest: {
 								Item: {
 									...item,
-									testData: Array.isArray(data.testData) ? data.testData.map(td => keysToCamelCase(td)) : [],
+									testData: Array.isArray(data.testData) ? data.testData.map(keysToCamelCase) : [],
 								}
 							}
 						};
@@ -109,7 +109,7 @@ async function saveInUseFactorsType(inUseFactorsData: BreProduct) {
 			TableName: "products",
 			Item: {
 				id: inUseFactorsData.productType, // use product type as ID directly
-				data: inUseFactorsData.data,
+				data: inUseFactorsData.data.map(keysToCamelCase),
 			}
 		})
 	);
