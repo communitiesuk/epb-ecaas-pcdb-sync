@@ -1,80 +1,82 @@
 {
-	"TableName": "products",
-	"AttributeDefinitions": [
-		{
-			"AttributeName": "id",
-			"AttributeType": "S"
-		},
-		{
-			"AttributeName": "technologyType",
-			"AttributeType": "S"
-		},
-		{
-			"AttributeName": "technologyGroup",
-			"AttributeType": "S"
-		},
-		{
-			"AttributeName": "brandName",
-			"AttributeType": "S"
-		}
-	],
-	"KeySchema": [
-		{
-			"AttributeName": "id",
-			"KeyType": "HASH"
-		}
-	],
-	"GlobalSecondaryIndexes": [
-		{
-			"IndexName": "by-technology-type",
-			"KeySchema": [
-				{
-					"AttributeName": "technologyType",
-					"KeyType": "HASH"
-				},
-				{
-					"AttributeName": "brandName",
-					"KeyType": "RANGE"
-				}
-			],
-			"Projection": {
-				"ProjectionType": "INCLUDE",
-				"NonKeyAttributes": [
-					"id",
-					"brandName",
-					"modelName",
-					"modelQualifier",
-					"technologyType",
-					"boilerLocation",
-					"communityHeatNetworkName"
-				]
-			}
-		},
-		{
-			"IndexName": "by-technology-group",
-			"KeySchema": [
-				{
-					"AttributeName": "technologyGroup",
-					"KeyType": "HASH"
-				},
-				{
-					"AttributeName": "brandName",
-					"KeyType": "RANGE"
-				}
-			],
-			"Projection": {
-				"ProjectionType": "INCLUDE",
-				"NonKeyAttributes": [
-					"id",
-					"brandName",
-					"modelName",
-					"modelQualifier",
-					"technologyType",
-					"boilerProductID",
-					"vesselType"
-				]
-			}
-		}
-	],
-	"BillingMode": "PAY_PER_REQUEST"
+  "TableName": "products",
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "technologyType",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "technologyGroup",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "brandName",
+      "AttributeType": "S"
+    }
+  ],
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "by-technology-type",
+      "KeySchema": [
+        {
+          "AttributeName": "technologyType",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "brandName",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "INCLUDE",
+        "NonKeyAttributes": [
+          "id",
+          "brandName",
+          "modelName",
+          "modelQualifier",
+          "technologyType",
+          "boilerLocation",
+          "communityHeatNetworkName",
+          "type",
+          "height"
+        ]
+      }
+    },
+    {
+      "IndexName": "by-technology-group",
+      "KeySchema": [
+        {
+          "AttributeName": "technologyGroup",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "brandName",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "INCLUDE",
+        "NonKeyAttributes": [
+          "id",
+          "brandName",
+          "modelName",
+          "modelQualifier",
+          "technologyType",
+          "boilerProductID",
+          "vesselType"
+        ]
+      }
+    }
+  ],
+  "BillingMode": "PAY_PER_REQUEST"
 }
