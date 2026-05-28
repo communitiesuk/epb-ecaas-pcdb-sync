@@ -48,7 +48,10 @@
           "boilerLocation",
           "communityHeatNetworkName",
           "type",
-          "height"
+          "height",
+          "floorFinishCompatibility",
+          "pipeCentres",
+          "systemName"
         ]
       }
     },
