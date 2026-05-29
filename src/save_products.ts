@@ -14,6 +14,13 @@ const localDynamoDBConfig = {
 	}
 };
 
+const nonProductIDPrefixes = {
+  ConvectorRadiator: "CR",
+  SmartAirBrick: "SAB",
+  HeatingControlRequirements: "HCR",
+};
+
+
 const client = new DynamoDBClient(process.env.NODE_ENV === "development" ? localDynamoDBConfig : {});
 const docClient = DynamoDBDocumentClient.from(client);
 
@@ -52,7 +59,6 @@ export const saveProducts = async (response: BreResponse | undefined) => {
 async function saveProductType(productTypeData: BreProduct) {
 	const products = (productTypeData?.data ?? []) as Record<string, unknown>[];
 	const productType = productTypeData.productType.trim();
-
 	const batchedProducts = batchItems(products);
 	let completedBatches = 0;
 
@@ -66,16 +72,16 @@ async function saveProductType(productTypeData: BreProduct) {
 		if (!batch?.length) {
 			continue;
 		}
-
 		await docClient.send(
 			new BatchWriteCommand({
 				RequestItems: {
 					"products": batch.map(x => {
 						const data = keysToCamelCase(x);
+						const prefix = nonProductIDPrefixes[productType as keyof typeof nonProductIDPrefixes];
 
 						const item: ProductData = {
 							...data,
-							id: `${(data.id ?? data.productID)}`,
+							id: data.productID ? String(data.productID) : `${prefix}${data.id}` as string,
 							brandName: (data.brandName ?? "-") as string,
 							modelName: (data.modelName ?? "") as string,
 							technologyType: productType,
@@ -116,3 +122,8 @@ async function saveInUseFactorsType(inUseFactorsData: BreProduct) {
 
 	console.log(`Saved set of in use factors data`);
 }
+
+
+
+
+
