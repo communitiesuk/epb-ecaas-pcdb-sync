@@ -51,7 +51,8 @@
           "height",
           "floorFinishCompatibility",
           "pipeCentres",
-          "systemName"
+          "systemName",
+          "boosterHeatPump"
         ]
       }
     },
