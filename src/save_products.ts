@@ -2,8 +2,8 @@ import { batchItems } from "./utils/batch_items.js";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { BatchWriteCommand, DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { type BreResponse, type BreProduct, type ProductData } from "./pcdb.types.js";
-import { keysToCamelCase } from "./utils/objects.js";
 import technologyGroupMapping from "./product_group_mapping.js";
+import camelcaseKeys from "camelcase-keys";
 
 const localDynamoDBConfig = {
 	region: "fakeRegion",
@@ -12,12 +12,6 @@ const localDynamoDBConfig = {
 		accessKeyId: "fakeMyKeyId",
 		secretAccessKey: "fakeSecretAccessKey",
 	},
-};
-
-const nonProductIDPrefixes = {
-	ConvectorRadiator: "CR",
-	SmartAirBrick: "SAB",
-	HeatingControlRequirements: "HCR",
 };
 
 const client = new DynamoDBClient(
@@ -31,6 +25,14 @@ function productTypeIsInUseFactors(productData: BreProduct): boolean {
 	return productData.productType.endsWith(inUseFactorsTableSuffix);
 }
 
+function productTypeContainsProducts(productData: BreProduct): boolean {
+	return productData.data.some(containsProductId);
+}
+
+function containsProductId(obj: object) {
+	return "productID" in obj && obj["productID"];
+}
+
 export const saveProducts = async (response: BreResponse | undefined) => {
 	console.log("Save products");
 
@@ -42,8 +44,10 @@ export const saveProducts = async (response: BreResponse | undefined) => {
 	for (const productType of response.productTypes) {
 		try {
 			if (!productTypeIsInUseFactors(productType)) {
-				// it's a standard product category
-				await saveProductType(productType);
+				if (productTypeContainsProducts(productType)) {
+					// it's a standard product category
+					await saveProductType(productType);
+				}
 			} else {
 				// it's side-loaded in use factors metadata
 				await saveInUseFactorsType(productType);
@@ -55,9 +59,12 @@ export const saveProducts = async (response: BreResponse | undefined) => {
 	}
 };
 
+type ProductToSave = Record<string, unknown> & { productID: string };
+
 async function saveProductType(productTypeData: BreProduct) {
-	const products = (productTypeData?.data ?? []) as Record<string, unknown>[];
+	const products = (productTypeData?.data ?? []).filter(containsProductId) as ProductToSave[];
 	const productType = productTypeData.productType.trim();
+	console.log(`Batching ${products.length} items (${productType})`);
 	const batchedProducts = batchItems(products);
 	let completedBatches = 0;
 
@@ -75,12 +82,11 @@ async function saveProductType(productTypeData: BreProduct) {
 			new BatchWriteCommand({
 				RequestItems: {
 					products: batch.map((x) => {
-						const data = keysToCamelCase(x);
-						const prefix = nonProductIDPrefixes[productType as keyof typeof nonProductIDPrefixes];
+						const data = camelcaseKeys(x);
 
 						const item: ProductData = {
 							...data,
-							id: data.productID ? String(data.productID) : (`${prefix}${data.id}` as string),
+							id: String(data.productId),
 							brandName: (data.brandName ?? "-") as string,
 							modelName: (data.modelName ?? "") as string,
 							technologyType: productType,
@@ -89,11 +95,13 @@ async function saveProductType(productTypeData: BreProduct) {
 								: {}),
 						};
 
+						const testData = Array.isArray(data.testData) ? data.testData as Record<string, unknown>[] : [];
+
 						return {
 							PutRequest: {
 								Item: {
 									...item,
-									testData: Array.isArray(data.testData) ? data.testData.map(keysToCamelCase) : [],
+									testData: testData.map(x => camelcaseKeys(x)),
 								},
 							},
 						};
@@ -118,7 +126,7 @@ async function saveInUseFactorsType(inUseFactorsData: BreProduct) {
 			TableName: "products",
 			Item: {
 				id: inUseFactorsData.productType, // use product type as ID directly
-				data: inUseFactorsData.data.map(keysToCamelCase),
+				data: camelcaseKeys(inUseFactorsData.data),
 			},
 		}),
 	);

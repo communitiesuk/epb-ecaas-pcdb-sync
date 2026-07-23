@@ -45,6 +45,7 @@ export const clearProducts = async () => {
 	console.log("Clearing products from DynamoDB");
 
 	const products = await getProducts(undefined, []);
+	console.log(`Batching ${products.length} items for deletion`);
 	const batchedProducts = batchItems(products);
 
 	for (let index = 0; index < batchedProducts.length; index++) {
