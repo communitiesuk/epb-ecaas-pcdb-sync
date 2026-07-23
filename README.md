@@ -14,7 +14,7 @@ There is an additional entry point that is used to run the script locally and re
 - One of these JavaScript package managers: `npm`, `yarn`, `bun` or `pnpm`
 - Docker
 - AWS CLI
-	- After installing, run `aws configure` and enter any string value for credentials and region
+  - After installing, run `aws configure` and enter any string value for credentials and region
 
 ### Local setup
 
@@ -46,6 +46,7 @@ Run `npm run dev -- --file=./data/[file_name].json`
 
 This should have now populated the local DynamoDB table with the product data and is hosted at http://localhost:8000.
 To point a locally running ECaas front-end at the database, add the following environment variable in a .env file in the front-end repo:
+
 ```
 LOCAL_DYNAMODB_ENDPOINT=http://localhost:8000
 ```

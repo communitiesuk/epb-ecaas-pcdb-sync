@@ -1,7 +1,7 @@
 export interface BreResponse {
 	exportDate: string;
 	exportVersion: number;
-	productTypes: BreProduct[]
+	productTypes: BreProduct[];
 }
 
 export interface BreProduct {

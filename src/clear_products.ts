@@ -1,24 +1,36 @@
-import { BatchWriteItemCommand, DynamoDBClient, ScanCommand, type AttributeValue } from "@aws-sdk/client-dynamodb";
+import {
+	BatchWriteItemCommand,
+	DynamoDBClient,
+	ScanCommand,
+	type AttributeValue,
+} from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { batchItems } from "./utils/batch_items.js";
 
 const localDynamoDBConfig = {
-	region: "fakeRegion", 
+	region: "fakeRegion",
 	endpoint: "http://localhost:8000",
 	credentials: {
 		accessKeyId: "fakeMyKeyId",
 		secretAccessKey: "fakeSecretAccessKey",
-	}
+	},
 };
 
-const client = new DynamoDBClient(process.env.NODE_ENV === "development" ? localDynamoDBConfig : {});
+const client = new DynamoDBClient(
+	process.env.NODE_ENV === "development" ? localDynamoDBConfig : {},
+);
 const docClient = DynamoDBDocumentClient.from(client);
 
-const getProducts = async (lastEvaluationKey?: Record<string, AttributeValue>, products: Record<string, AttributeValue>[] = []): Promise<Record<string, AttributeValue>[]> => {
-	const result = await docClient.send(new ScanCommand({
-		TableName: "products",
-		ExclusiveStartKey: lastEvaluationKey,
-	}));
+const getProducts = async (
+	lastEvaluationKey?: Record<string, AttributeValue>,
+	products: Record<string, AttributeValue>[] = [],
+): Promise<Record<string, AttributeValue>[]> => {
+	const result = await docClient.send(
+		new ScanCommand({
+			TableName: "products",
+			ExclusiveStartKey: lastEvaluationKey,
+		}),
+	);
 
 	const items = products.concat(result.Items ?? []);
 
@@ -46,9 +58,9 @@ export const clearProducts = async () => {
 			await docClient.send(
 				new BatchWriteItemCommand({
 					RequestItems: {
-						"products": batch.map(x => ({
+						products: batch.map((x) => ({
 							DeleteRequest: {
-								Key: { "id": x.id! },
+								Key: { id: x.id! },
 							},
 						})),
 					},

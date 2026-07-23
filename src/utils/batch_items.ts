@@ -1,6 +1,6 @@
 export const batchItems = <T>(products: T[]): T[][] => {
 	console.log(`Batching ${products.length} items`);
-	
+
 	const batchSize = 25;
 	const batches: T[][] = [];
 
@@ -17,12 +17,12 @@ export const batchItems = <T>(products: T[]): T[][] => {
 			if (!p) {
 				break;
 			}
-			
+
 			batch.push(p);
 		}
 
 		batches.push(batch);
-		
+
 		if (batch.length >= batchSize) {
 			createBatch(currentBatch + 1);
 		}

@@ -5,7 +5,7 @@ import type { BreResponse } from "./pcdb.types.js";
 const readFile = async (fileName: string) => {
 	console.log(`Reading data from ${fileName}`);
 
-    const params = {
+	const params = {
 		Bucket: process.env.BUCKET_NAME,
 		Key: fileName,
 	};
@@ -25,8 +25,8 @@ const readFile = async (fileName: string) => {
 };
 
 export const importProducts = async (fileName: string) => {
-    const data = await readFile(fileName);
-	const response = data ? JSON.parse(data) as BreResponse : undefined;
+	const data = await readFile(fileName);
+	const response = data ? (JSON.parse(data) as BreResponse) : undefined;
 
-    await saveProducts(response);
+	await saveProducts(response);
 };
