@@ -14,6 +14,7 @@ phases:
       - npm run build
       - cd dist
       - mv package.json src/
+      - mv node_modules src/
       - cd src
       - rm -rf pcdb.types.tf
       - zip -r pcdb-sync-lambda.zip .
