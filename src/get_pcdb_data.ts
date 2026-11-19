@@ -14,9 +14,3 @@ export async function getPcdbData() {
 	const data = await response.json();
 	return data;
 }
-
-export function formatExportFileName(data: any): string {
-	const exportDate = data.exportDate.split("T")[0];
-	const fileName = `export_v${data.exportVersion}_${exportDate}.json`;
-	return fileName;
-}

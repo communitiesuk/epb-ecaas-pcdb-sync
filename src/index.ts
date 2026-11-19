@@ -1,10 +1,7 @@
-import { addFileToS3bucket, fileExistsInS3bucket } from "./add_file_s3.js";
+import { addFileS3, fileExistsS3, formatExportFileName } from "./s3_actions.js";
 import { clearProducts } from "./clear_products.js";
-import { formatExportFileName, getPcdbData } from "./get_pcdb_data.js";
+import { getPcdbData } from "./get_pcdb_data.js";
 import { importProducts } from "./import_products_s3.js";
-import { S3Client } from "@aws-sdk/client-s3";
-
-export const s3Client = new S3Client();
 
 export const handler = async () => {
 	const data = await getPcdbData();
@@ -16,10 +13,10 @@ export const handler = async () => {
 		throw new Error("Missing BUCKET_NAME environment variable");
 	}
 
-	let fileExists: boolean = await fileExistsInS3bucket(bucketName, filename);
+	let fileExists: boolean = await fileExistsS3(bucketName, filename);
 
 	if (!fileExists) {
-		await addFileToS3bucket(bucketName, filename, data);
+		await addFileS3(bucketName, filename, data);
 	}
 
 	// for now, don't populate products table with new file and keep old process in place
