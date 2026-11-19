@@ -2,12 +2,12 @@ import {clearProducts} from "./clear_products.js";
 import {importProducts} from "./import_products_s3.js";
 import {HeadObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 
-const s3Client = new S3Client({region: process.env.AWS_REGION || "eu-west-2"});
+const s3Client = new S3Client({region: process.env.AWS_REGION || "eu-west-2"}); // TODO remove contents
 
 export const handler = async () => {
   // call PCDB API and get version
   const user_auth = `${process.env.PCDB_API_USERNAME}:${process.env.PCDB_API_PASSWORD}`;
-  const response = await fetch(`${process.env.PCDB_API_URL}`, {
+  const response = await fetch(`${process.env.PCDB_API_URL}?sensitive=true`, {
 	headers: {
 	  "Authorization": `Basic ${btoa(user_auth)}`,
 	  "Content-Type": "application/json"
