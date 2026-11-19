@@ -17,13 +17,8 @@ export const handler = async () => {
 
 	if (!fileExists) {
 		await addFileS3(bucketName, filename, data);
-	}
-
-	// for now, don't populate products table with new file and keep old process in place
-	// can test in integration by temporarily removing EXPORT_FILENAME var from lambda
-	if (process.env.EXPORT_FILENAME) {
-		await clearProducts();
-		await importProducts(process.env.EXPORT_FILENAME);
+	  	await clearProducts();
+	  	await importProducts(filename);
 	}
 };
 
