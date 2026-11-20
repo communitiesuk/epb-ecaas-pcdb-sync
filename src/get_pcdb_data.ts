@@ -11,6 +11,5 @@ export async function getPcdbData() {
 		throw new Error(`Error fetching data from the PCDB, status: ${response.status}`);
 	}
 
-	const data = await response.json();
-	return data;
+  return await response.json();
 }
