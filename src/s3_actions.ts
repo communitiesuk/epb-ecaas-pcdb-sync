@@ -1,4 +1,4 @@
-import {GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
+import {HeadObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 
 export const s3Client = new S3Client();
 
@@ -33,27 +33,6 @@ export const addFileS3 = async (bucketName: string, filename: string, data: any)
   );
   console.log(`Uploaded ${filename} to S3`);
 }
-
-export const readFileS3 = async (fileName: string) => {
-  console.log(`Reading data from ${fileName}`);
-
-  const params = {
-	Bucket: process.env.BUCKET_NAME,
-	Key: fileName,
-  };
-
-  const command = new GetObjectCommand(params);
-  let s3Response;
-
-  try {
-	s3Response = await s3Client.send(command);
-  } catch (error) {
-	console.error("Error reading data from S3", error);
-	return;
-  }
-
-  return s3Response.Body?.transformToString();
-};
 
 export function formatExportFileName(data: any): string {
   const exportDate = data.exportDate.split("T")[0];
