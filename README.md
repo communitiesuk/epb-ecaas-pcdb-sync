@@ -51,6 +51,14 @@ To point a locally running ECaas front-end at the database, add the following en
 LOCAL_DYNAMODB_ENDPOINT=http://localhost:8000
 ```
 
+### Run dynamoDB commands locally
+
+`aws dynamodb list-tables --endpoint-url http://localhost:8000 --region fakeRegion`
+
+`aws dynamodb describe-table --table-name products --endpoint-url http://localhost:8000 --region fakeRegion`
+
+`aws dynamodb scan --table-name products --select COUNT --endpoint-url http://localhost:8000 --region fakeRegion`
+
 ### Deleting local DynamoDB table
 
 To delete the local DynamoDB table, run `npm run delete`
