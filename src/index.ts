@@ -22,5 +22,3 @@ export const handler = async () => {
 		await saveProducts(data as BreResponse);
 	}
 };
-
-// handler().then((r) => r); // TODO remove

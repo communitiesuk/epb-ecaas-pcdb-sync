@@ -1,4 +1,4 @@
-import {HeadObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
+import {HeadObjectCommand, PutObjectCommand, S3Client, S3ServiceException} from "@aws-sdk/client-s3";
 
 export const s3Client = new S3Client();
 
@@ -12,13 +12,16 @@ export const fileExistsS3 = async (bucketName: string, filename: string) => {
 	);
 	console.log(`${filename} already exists in S3 bucket`);
 	return true;
-  } catch (error: any) {
-	// TODO avoid any?
-	if (error.name !== "NotFound" && error.$metadata?.httpStatusCode !== 404) {
-	  console.error("Error reading data from S3", error);
-	  throw error;
+  } catch (error) {
+	if (
+	  error instanceof S3ServiceException &&
+	  (error.name === "NotFound" || error.$metadata?.httpStatusCode === 404)
+	) {
+	  return false;
 	}
-	return false;
+
+	console.error("Error reading data from S3", error);
+	throw error;
   }
 }
 
