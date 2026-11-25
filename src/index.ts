@@ -1,8 +1,7 @@
 import { addFileS3, fileExistsS3, formatExportFileName } from "./s3_actions.js";
 import { clearProducts } from "./clear_products.js";
 import { getPcdbData } from "./get_pcdb_data.js";
-import { saveProducts } from "./save_products.js";
-import type { BreResponse } from "./pcdb.types.js";
+import { importProducts } from "./import_products_s3.js";
 
 export const handler = async () => {
 	const data = await getPcdbData();
@@ -19,6 +18,6 @@ export const handler = async () => {
 	if (!fileExists) {
 		await addFileS3(bucketName, filename, data);
 	  	await clearProducts();
-		await saveProducts(data as BreResponse);
+	  	await importProducts(filename);
 	}
 };
